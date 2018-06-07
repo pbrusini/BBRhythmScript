@@ -1,0 +1,3 @@
+tmp=[];
+for i=1:360
+tmp=catEEG.event
