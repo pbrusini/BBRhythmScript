@@ -1,13 +1,13 @@
-pathIn='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/6months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR/';
-pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/6months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR_Cluster/';
+pathIn='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR/';
+pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR_Cluster/';
 % ssListSyll=dir([pathIn 'scrpt*Syll.mat']);
 % ssListRest=dir([pathIn 'scrpt*Resting.mat']);
 % ssListDrum=dir([pathIn 'scrpt*Drum.mat']);
 % ssListSong=dir([pathIn 'scrpt*Song.mat']);
 
-ssListSyll=dir([pathIn 'ss*Syll.mat']);
+ssListSyll=dir([pathIn 'ss*Song2Hz.mat']);
 ssListRest=dir([pathIn 'ss*Resting.mat']);
-ssListDrum=dir([pathIn 'ss*Drum.mat']);
+ssListDrum=dir([pathIn 'ss*Song1Hz.mat']);
 ssListSong=dir([pathIn 'ss*Song.mat']);
 
 tmpTF=[];  tmpName=[];  tmpPhase=[];  tmpMeanPhase=[];
@@ -150,7 +150,7 @@ phaseClusterFrontResttwoHertz=phaseClusterFrontRest(:,:,17);
 bli=mean(TFGrandDrumdata.powspctrm, 1);
 bli=squeeze(bli);
 bli=mean(bli, 1);
-figure(5000)
+figure(500)
 plot(bli(1:80));
 hold on
 bla=mean(TFGrandSylldata.powspctrm, 1);
@@ -176,16 +176,16 @@ xticklabels({int2str(freq(1)), int2str(freq(8)), int2str(freq(17)), int2str(freq
 cfg = [];
 cfg.channel          = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
 %cfg.latency          = [0 1.6];
-cfg.frequency        =  [0.5 20];
+cfg.frequency        =  [1 20];
 cfg.method           = 'montecarlo';
 cfg.statistic        = 'ft_statfun_indepsamplesT';
 cfg.correctm         = 'cluster';
-cfg.clusteralpha     = 0.05;
+cfg.clusteralpha     = 0.01;
 cfg.clusterstatistic = 'maxsum';
 cfg.minnbchan        = 0;
 cfg.tail             = 0;
 cfg.clustertail      = 0;
-cfg.alpha            = 0.05;
+cfg.alpha            = 0.01;
 cfg.numrandomization = 10000;
 load('EGI.mat')
 cfg.layout           = EGI;
@@ -215,7 +215,7 @@ save([pathOut 'statSyll'],'statSyll')
 
 try
     cfg = [];
-    cfg.alpha  = 0.05;
+    cfg.alpha  = 0.01;
     cfg.parameter = 'stat';
     cfg.markers='labels';
     %  cfg.highlight    =  'labels';
@@ -233,16 +233,16 @@ end
 cfg = [];
 cfg.channel          = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
 %cfg.latency          = [0 1.6];
-cfg.frequency        =  [0.5 20];
+cfg.frequency        =  [1 20];
 cfg.method           = 'montecarlo';
 cfg.statistic        = 'ft_statfun_indepsamplesT';
 cfg.correctm         = 'cluster';
-cfg.clusteralpha     = 0.05;
+cfg.clusteralpha     = 0.01;
 cfg.clusterstatistic = 'maxsum';
 cfg.minnbchan        = 0;
 cfg.tail             = 0;
 cfg.clustertail      = 0;
-cfg.alpha            = 0.05;
+cfg.alpha            = 0.01;
 cfg.numrandomization = 10000;
 cfg.layout           = EGI;
 % prepare_neighbours determines what sensors may form clusters
@@ -271,7 +271,7 @@ save([pathOut 'statDrum'],'statDrum');
 
 try
     cfg = [];
-    cfg.alpha  = 0.05;
+    cfg.alpha  = 0.01;
     cfg.parameter = 'stat';
     cfg.markers='labels';
     cfg.highlight    =  'labels';

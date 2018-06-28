@@ -1,5 +1,5 @@
-pathIn='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/2months/Event_Filtered_MarkedbyTrial_CleanByProb/';
-pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/2months/Event_Filtered_MarkedbyTrial_CleanByProb_RerefDetrendBase_FFTSNR/';
+pathIn='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/9months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg/';
+pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/9months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR/';
 ssList=dir([pathIn 'ss*.mat']);
 
 ssList2=dir([pathOut 'scrpt*.mat']);

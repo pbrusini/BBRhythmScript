@@ -3,14 +3,14 @@ pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event
 ssList=dir([pathIn '*.set']);
 
 
-for i =1:length(ssList)
+for i =70:length(ssList)
     subjectName = [ ssList(i).name]
     [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
     subjectNamex = char(subjectName(:,1:length(subjectName)-6));
     NamSetResting=[subjectNamex 'Resting.set'];
     NamSetDrum=[subjectNamex 'Drum.set'];
     NamSetSyll=[subjectNamex 'Syll.set'];
-    NamSetSong=[subjectNamex 'Song.set'];
+%     NamSetSong=[subjectNamex 'Song.set'];
     NamSetMer=[subjectNamex '_RDS.set'];
     NamSetAll=[subjectNamex '_All.set'];
     

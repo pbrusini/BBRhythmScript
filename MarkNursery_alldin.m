@@ -3,7 +3,7 @@ pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event
 ssList=dir([pathIn '*.set']);
 
 
-for i =96:length(ssList)
+for i =1:2%length(ssList)
     subjectName = [ ssList(i).name]
     [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
     subjectNamex = char(subjectName(:,1:length(subjectName)-6))
@@ -145,40 +145,40 @@ for i =96:length(ssList)
             
 
             if b==2 || strcmp(EEG.event(Songs.Lamb(b)-2).type,'TRS3' ) 
-                EEG.event(Songs.Lamb(b)).type='D1Hz';
+                EEG.event(Songs.Lamb(b)).type='DLam';
                 tempLamb=b;
                 lamb=1;
             elseif (EEG.event(Songs.Lamb(b)).latency - EEG.event(Songs.Lamb(tempLamb)).latency)/1000>=8 && EEG.event(Songs.Lamb(b)).repe==EEG.event(Songs.Lamb(tempLamb)).repe && lamb<9
-                EEG.event(Songs.Lamb(b)).type='D1Hz';
+                EEG.event(Songs.Lamb(b)).type='DLam';
                 tempLamb=b;
                 lamb=lamb+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Lond(b)-2).type,'TRS3' )
-                EEG.event(Songs.Lond(b)).type='D1Hz';
+                EEG.event(Songs.Lond(b)).type='DLon';
                 tempLond=b;
                 lond=1
             elseif (EEG.event(Songs.Lond(b)).latency - EEG.event(Songs.Lond(tempLond)).latency)/1000>=8 && EEG.event(Songs.Lond(b)).repe==EEG.event(Songs.Lond(tempLond)).repe && lond<5
-                EEG.event(Songs.Lond(b)).type='D1Hz';
+                EEG.event(Songs.Lond(b)).type='DLon';
                 tempLond=b;
                 lond=lond+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.The_(b)-2).type,'TRS3' )
-                EEG.event(Songs.The_(b)).type='D1Hz';
+                EEG.event(Songs.The_(b)).type='DThe';
                 tempThe=b;
                 the=1;
             elseif (EEG.event(Songs.The_(b)).latency - EEG.event(Songs.The_(tempThe)).latency)/1000>=8 && EEG.event(Songs.The_(b)).repe==EEG.event(Songs.The_(tempThe)).repe && the<6
-                EEG.event(Songs.The_(b)).type='D1Hz';
+                EEG.event(Songs.The_(b)).type='DThe';
                 tempThe=b;
                 the=the+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Ride(b)-2).type,'TRS3' )
-                EEG.event(Songs.Ride(b)).type='D1Hz';
+                EEG.event(Songs.Ride(b)).type='DRid';
 %                 tempRide=b;
 %             elseif (EEG.event(Songs.Ride(b)).latency - EEG.event(Songs.Ride(tempRide)).latency)/1000>=8 && EEG.event(Songs.Ride(b)).repe==EEG.event(Songs.Ride(tempRide)).repe
 %                 EEG.event(Songs.Ride(b)).type='DRid';
@@ -187,8 +187,8 @@ for i =96:length(ssList)
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Wint(b)-2).type,'TRS3' )
-                EEG.event(Songs.Wint(b)).type='D1.5';
-                tempWint=b;
+%                 EEG.event(Songs.Wint(b)).type='DWin';
+%                 tempWint=b;
 %             elseif (EEG.event(Songs.Wint(b)).latency - EEG.event(Songs.Wint(tempWint)).latency)/1000>=8 && EEG.event(Songs.Wint(b)).repe==EEG.event(Songs.Wint(tempWint)).repe
 %                 EEG.event(Songs.Wint(b)).type='DWin';
 %                 tempWint=b;
@@ -199,7 +199,7 @@ for i =96:length(ssList)
         %         end
         try
             if b==2 || strcmp(EEG.event(Songs.LitJ(b)-2).type,'TRS3' )
-                EEG.event(Songs.LitJ(b)).type='D1.5';
+                EEG.event(Songs.LitJ(b)).type='DLiJ';
                 tempLitJ=b;
 %             elseif (EEG.event(Songs.LitJ(b)).latency - EEG.event(Songs.LitJ(tempLitJ)).latency)/1000>=8 && EEG.event(Songs.LitJ(b)).repe==EEG.event(Songs.LitJ(tempLitJ)).repe
 %                 EEG.event(Songs.LitJ(b)).type='DLiJ';
@@ -208,29 +208,29 @@ for i =96:length(ssList)
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Incy(b)-2).type,'TRS3' )
-                EEG.event(Songs.Incy(b)).type='D2Hz';
+                EEG.event(Songs.Incy(b)).type='DInc';
                 tempIncy=b;
                 incy=1;
             elseif (EEG.event(Songs.Incy(b)).latency - EEG.event(Songs.Incy(tempIncy)).latency)/1000>=8 && EEG.event(Songs.Incy(b)).repe==EEG.event(Songs.Incy(tempIncy)).repe && incy<2
-                EEG.event(Songs.Incy(b)).type='D2Hz';
+                EEG.event(Songs.Incy(b)).type='DInc';
                 tempIncy=b;
                 incy=incy+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.When(b)-2).type,'TRS3' )
-                EEG.event(Songs.When(b)).type='D1.5';
+                EEG.event(Songs.When(b)).type='DWhe';
                 tempWhen=b;
                 when=1;
             elseif (EEG.event(Songs.When(b)).latency - EEG.event(Songs.When(tempWhen)).latency)/1000>=8 && EEG.event(Songs.When(b)).repe==EEG.event(Songs.When(tempWhen)).repe && when<2
-                EEG.event(Songs.When(b)).type='D1.5';
+                EEG.event(Songs.When(b)).type='DWhe';
                 tempWhen=b;
                 when=when+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Muff(b)-2).type,'TRS3' )
-                EEG.event(Songs.Muff(b)).type='D1.5';
+                EEG.event(Songs.Muff(b)).type='DMuf';
                 tempMuff=b;
 %             elseif (EEG.event(Songs.Muff(b)).latency - EEG.event(Songs.Muff(tempMuff)).latency)/1000>=8 && EEG.event(Songs.Muff(b)).repe==EEG.event(Songs.Muff(tempMuff)).repe
 %                 EEG.event(Songs.Muff(b)).type='DMuf';
@@ -241,7 +241,7 @@ for i =96:length(ssList)
         
         try
             if b==2 || strcmp(EEG.event(Songs.Ring(b)-2).type,'TRS3' )
-                EEG.event(Songs.Ring(b)).type='D2Hz';
+                EEG.event(Songs.Ring(b)).type='DRin';
                 tempRing=b;
 %             elseif (EEG.event(Songs.Ring(b)).latency - EEG.event(Songs.Ring(tempRing)).latency)/1000>=8 && EEG.event(Songs.Ring(b)).repe==EEG.event(Songs.Ring(tempRing)).repe
 %                 EEG.event(Songs.Ring(b)).type='DRin';
@@ -250,7 +250,7 @@ for i =96:length(ssList)
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Hick(b)-2).type,'TRS3' )
-                EEG.event(Songs.Hick(b)).type='D2Hz';
+                EEG.event(Songs.Hick(b)).type='DHic';
                 tempHick=b;
 %             elseif (EEG.event(Songs.Hick(b)).latency - EEG.event(Songs.Hick(tempHick)).latency)/1000>=8 && EEG.event(Songs.Hick(b)).repe==EEG.event(Songs.Ring(tempHick)).repe
 %                 EEG.event(Songs.Hick(b)).type='DHic';
@@ -260,33 +260,33 @@ for i =96:length(ssList)
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Sing(b)-2).type,'TRS3' )
-                EEG.event(Songs.Sing(b)).type='D2Hz';
+                EEG.event(Songs.Sing(b)).type='DSin';
                 tempSing=b;
                 sing=1;
             elseif (EEG.event(Songs.Sing(b)).latency - EEG.event(Songs.Sing(tempSing)).latency)/1000>=8 && EEG.event(Songs.Sing(b)).repe==EEG.event(Songs.Sing(tempSing)).repe && sing<4
-                EEG.event(Songs.Sing(b)).type='D2Hz';
+                EEG.event(Songs.Sing(b)).type='DSin';
                 tempSing=b;
                 sing=sing+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.JaJil(b)-2).type,'TRS3' )
-                EEG.event(Songs.JaJil(b)).type='D2Hz';
+                EEG.event(Songs.JaJil(b)).type='DJaJ';
                 tempJaJil=b;
                 jajil=1;
             elseif (EEG.event(Songs.JaJil(b)).latency - EEG.event(Songs.JaJil(tempJaJil)).latency)/1000>=8 && EEG.event(Songs.JaJil(b)).repe==EEG.event(Songs.JaJil(tempJaJil)).repe && jajil<2
-                EEG.event(Songs.JaJil(b)).type='D2Hz';
+                EEG.event(Songs.JaJil(b)).type='DJaJ';
                 tempJaJil=b;
                 jajil=jajil+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Twin(b)-2).type,'TRS3' )
-                EEG.event(Songs.Twin(b)).type='D2Hz';
+                EEG.event(Songs.Twin(b)).type='DTwi';
                 tempTwin=b;
                 twin=1;
             elseif (EEG.event(Songs.Twin(b)).latency - EEG.event(Songs.Twin(tempTwin)).latency)/1000>=8 && EEG.event(Songs.Twin(b)).repe==EEG.event(Songs.Twin(tempTwin)).repe && twin<3
-                EEG.event(Songs.Twin(b)).type='D2Hz';
+                EEG.event(Songs.Twin(b)).type='DTwi';
                 tempTwin=b;
                 twin=twin+1;
             end
@@ -295,33 +295,33 @@ for i =96:length(ssList)
         
         try
             if b==2 || strcmp(EEG.event(Songs.Frer(b)-2).type,'TRS3' )
-                EEG.event(Songs.Frer(b)).type='D2.5';
+                EEG.event(Songs.Frer(b)).type='DFre';
                 tempFrer=b;
                 frere=1;
             elseif (EEG.event(Songs.Frer(b)).latency - EEG.event(Songs.Frer(tempFrer)).latency)/1000>=8 && EEG.event(Songs.Frer(b)).repe==EEG.event(Songs.Frer(tempFrer)).repe && frere<2
-                EEG.event(Songs.Frer(b)).type='D2.5';
+                EEG.event(Songs.Frer(b)).type='DFre';
                 tempFrer=b;
                 frere=frere+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Mary(b)-2).type,'TRS3' )
-                EEG.event(Songs.Mary(b)).type='D2.5';
+                EEG.event(Songs.Mary(b)).type='DMar';
                 tempMary=b;
                 mary=1;
             elseif (EEG.event(Songs.Mary(b)).latency - EEG.event(Songs.Mary(tempMary)).latency)/1000>=8 && EEG.event(Songs.Mary(b)).repe==EEG.event(Songs.Mary(tempMary)).repe && mary<2
-                EEG.event(Songs.Mary(b)).type='D2.5';
+                EEG.event(Songs.Mary(b)).type='DMar';
                 tempMary=b;
                 mary=mary+1;
             end
         end
         try
             if b==2 || strcmp(EEG.event(Songs.Simp(b)-2).type,'TRS3' )
-                EEG.event(Songs.Simp(b)).type='D2.5';
+                EEG.event(Songs.Simp(b)).type='DSim';
                 tempSimp=b;
                 simp=1;
             elseif (EEG.event(Songs.Simp(b)).latency - EEG.event(Songs.Simp(tempSimp)).latency)/1000>=8 && EEG.event(Songs.Simp(b)).repe==EEG.event(Songs.Simp(tempSimp)).repe && simp<3
-                EEG.event(Songs.Simp(b)).type='D2.5';
+                EEG.event(Songs.Simp(b)).type='DSim';
                 tempSimp=b;
                 simp=simp+1;
             end
@@ -503,7 +503,7 @@ for i =96:length(ssList)
         EEGR = pop_epoch( EEG, { 'D2.5' }, [0  8], 'newname', 'EGI file epochs', 'epochinfo', 'yes');
         % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, CURRENTSET,'setname', 'EGI file epochs', 'save', setNamesegNx);
         EEGR = pop_rmbase( EEGR, [0  8000]);
-        EEGR = pop_saveset( EEGR, NamSetSongMoreTwo, pathOut);
+        EEGR = pop_saveset( EEGR, NamSetSyll, pathOut);
     end
     
     

@@ -1,5 +1,5 @@
-pathIn='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/6months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR/';
-pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/6months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR_Cluster/';
+pathIn='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/6months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR/SquareComp/';
+pathOut='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/6months/Event_Filtered_MarkedbyTrial_CleanByProb_TimeAvg_FFTSNR_ClusterSquare/';
 % ssListSyll=dir([pathIn 'scrpt*Syll.mat']);
 % ssListRest=dir([pathIn 'scrpt*Resting.mat']);
 % ssListDrum=dir([pathIn 'scrpt*Drum.mat']);
@@ -150,7 +150,7 @@ phaseClusterFrontResttwoHertz=phaseClusterFrontRest(:,:,17);
 bli=mean(TFGrandDrumdata.powspctrm, 1);
 bli=squeeze(bli);
 bli=mean(bli, 1);
-figure(5000)
+figure(500)
 plot(bli(1:80));
 hold on
 bla=mean(TFGrandSylldata.powspctrm, 1);
@@ -167,40 +167,55 @@ xticks([1 8 17 24 32 40 48 56 64 72 80]);
 xticklabels({int2str(freq(1)), int2str(freq(8)), int2str(freq(17)), int2str(freq(24)), int2str(freq(32)), int2str(freq(40)), int2str(freq(48)), int2str(freq(56)), int2str(freq(64)), int2str(freq(72)), int2str(freq(80))});
 
 
-%pause
-
 % cfg = [];
 % cfg.rotate =+180;
 % EGI = ft_prepare_layout(cfg, TFdata);
 
 cfg = [];
 cfg.channel          = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
-%cfg.latency          = [0 1.6];
-cfg.frequency        =  [0.5 20];
+cfg.frequency        =  [1 20];
 cfg.method           = 'montecarlo';
-cfg.statistic        = 'ft_statfun_indepsamplesT';
+cfg.statistic        = 'ft_statfun_depsamplesT';
 cfg.correctm         = 'cluster';
-cfg.clusteralpha     = 0.05;
+cfg.clusteralpha     = 0.01;
 cfg.clusterstatistic = 'maxsum';
 cfg.minnbchan        = 0;
 cfg.tail             = 0;
 cfg.clustertail      = 0;
-cfg.alpha            = 0.05;
+cfg.alpha            = 0.01;
 cfg.numrandomization = 10000;
-load('EGI.mat')
 cfg.layout           = EGI;
 % prepare_neighbours determines what sensors may form clusters
 cfg_neighb.method    = 'distance';
 cfg.neighbours       = ft_prepare_neighbours(cfg_neighb, TFGrandDrumdata);
-cfg.dimord           ='subj_chan_freq';
+cfg.dimord           ='subj_chan_freq_time';
 
 
-design = zeros(1, length(ssListSyll) + length(ssListRest));
-design(1, 1:length(ssListSyll))=1;
-design(1, (length(ssListSyll)+1):(length(ssListSyll) + length(ssListRest)))=2;
+subj = length(ssListSyll)
+design = zeros(2,2*subj);
+for i = 1:subj
+  design(1,i) = i;
+end
+for i = 1:subj
+  design(1,subj+i) = i;
+end
+design(2,1:subj)        = 1;
+design(2,subj+1:2*subj) = 2;
 
 cfg.design   = design';
-cfg.ivar     = 1;
+cfg.uvar     = 1;
+cfg.ivar     = 2;
+
+[statDrum] =  ft_freqstatistics(cfg, TFGrandDrumdata, TFGrandRestdata)
+
+meanDrum=mean(TFGrandDrumdata.powspctrm);
+meanDrum=squeeze(meanDrum);
+meanRest=mean(TFGrandRestdata.powspctrm);
+meanRest=squeeze(meanRest);
+statDrum.raweffect = meanDrum- meanRest;
+%stat.raweffect = stat.raweffect(:,2,:);
+
+
 
 [statSyll] =  ft_freqstatistics(cfg, TFGrandSylldata, TFGrandRestdata)
 
@@ -209,69 +224,22 @@ meanSyll=squeeze(meanSyll);
 meanRest=mean(TFGrandRestdata.powspctrm);
 meanRest=squeeze(meanRest);
 statSyll.raweffect = meanSyll- meanRest;
-statSyll.raweffect(:,2,:)
+%statSyll.raweffect = stat.raweffect(:,2,:);
 
-save([pathOut 'statSyll'],'statSyll')
 
-try
-    cfg = [];
-    cfg.alpha  = 0.05;
-    cfg.parameter = 'stat';
-    cfg.markers='labels';
-    %  cfg.highlight    =  'labels';
-    cfg.channel = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
-    cfg.highlightseries = {'labels','labels','labels','labels','labels'};
-    %cfg.highlightsizeseries =[8 8 8 8 8];
-    cfg.layout = EGI;
-    
-    ft_clusterplot(cfg, statSyll);
-catch
-    display('no significant cluster')
-end
-%%
-
-cfg = [];
-cfg.channel          = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
-%cfg.latency          = [0 1.6];
-cfg.frequency        =  [0.5 20];
-cfg.method           = 'montecarlo';
-cfg.statistic        = 'ft_statfun_indepsamplesT';
-cfg.correctm         = 'cluster';
-cfg.clusteralpha     = 0.05;
-cfg.clusterstatistic = 'maxsum';
-cfg.minnbchan        = 0;
-cfg.tail             = 0;
-cfg.clustertail      = 0;
-cfg.alpha            = 0.05;
-cfg.numrandomization = 10000;
-cfg.layout           = EGI;
-% prepare_neighbours determines what sensors may form clusters
-cfg_neighb.method    = 'distance';
-cfg.neighbours       = ft_prepare_neighbours(cfg_neighb, TFGrandDrumdata);
-cfg.dimord           ='subj_chan_freq';
-
-design = zeros(1, length(ssListDrum) + length(ssListRest));
-design(1, 1:length(ssListDrum))=1;
-design(1, (length(ssListDrum)+1):(length(ssListDrum) + length(ssListRest)))=2;
-
-cfg.design   = design';
-cfg.ivar     = 1;
-
-[statDrum] =  ft_freqstatistics(cfg, TFGrandDrumdata, TFGrandRestdata)
-
-meanDrum=mean(TFGrandDrumdata.powspctrm);
-meanDrum=squeeze(meanDrum);
-meanRest=mean(TFGrandRestdata.powspctrm);
-meanRest=squeeze(meanRest);
-statDrum.raweffect = meanSyll- meanRest;
-%stat.raweffect = stat.raweffect(:,2,:);
-
-save([pathOut 'statDrum'],'statDrum');
+% [statSong] =  ft_freqstatistics(cfg, TFGrandSongdata, TFGrandRestdata)
+% 
+% meanSong=mean(TFGrandSylldata.powspctrm);
+% meanSong=squeeze(meanSong);
+% meanRest=mean(TFGrandRestdata.powspctrm);
+% meanRest=squeeze(meanRest);
+% statSong.raweffect = meanSong- meanRest;
+% %statSong.raweffect = statSong.raweffect(:,2,:);
 
 
 try
     cfg = [];
-    cfg.alpha  = 0.05;
+    cfg.alpha  = 0.1;
     cfg.parameter = 'stat';
     cfg.markers='labels';
     cfg.highlight    =  'labels';
@@ -279,80 +247,56 @@ try
     cfg.highlightseries = {'labels','labels','labels','labels','labels'};
     %cfg.highlightsizeseries =[8 8 8 8 8];
     cfg.layout = EGI;
-    
     ft_clusterplot(cfg, statDrum);
-catch
-    display('no significant cluster')
 end
 
 
-% % find significant channels
-% sig_tiles = find(statSyll.mask); % find significant time-frequency tiles
-% [chan freq time] = ind2sub(size(statSyll.mask),sig_tiles); % transform linear indices to subscript to extract significant channels, timepoints and frequencies
-% chan = unique(chan);
-% 
-% % plot TFRs
-% cfg               = [];
-% cfg.parameter     = 'stat';
-% cfg.maskparameter = 'mask';
-% cfg.maskalpha     = .4; % opacity value for non-significant parts
-% cfg.zlim          = [-4 4];
-% cfg.colorbar      = 'yes';
-% 
-% % loop over channel sets and plot
-% for ichan = 1:length(chan)
-%     cfg.channel = chan(ichan);
-%     figure, ft_singleplotTFR(cfg,statSyll),
-% end
+try
+    cfg = [];
+    cfg.alpha  = 0.1;
+    cfg.parameter = 'stat';
+    cfg.markers='labels';
+    cfg.highlight    =  'labels';
+    cfg.channel = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
+    cfg.highlightseries = {'labels','labels','labels','labels','labels'};
+    %cfg.highlightsizeseries =[8 8 8 8 8];
+    cfg.layout = EGI;
+    ft_clusterplot(cfg, statSyll);
+end
 
 
-%%
-% cfg = [];
-% cfg.channel          = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
-% %cfg.latency          = [0 1.6];;
-% cfg.frequency        =  'all';
-% cfg.method           = 'montecarlo';
-% cfg.statistic        = 'ft_statfun_indepsamplesT';
-% cfg.correctm         = 'cluster';
-% cfg.clusteralpha     = 0.05;
-% cfg.clusterstatistic = 'maxsum';
-% cfg.minnbchan        = 0;
-% cfg.tail             = 0;
-% cfg.clustertail      = 0;
-% cfg.alpha            = 0.05;
-% cfg.numrandomization = 10000;
-% cfg.layout           = EGI;
-% % prepare_neighbours determines what sensors may form clusters
-% cfg_neighb.method    = 'distance';
-% cfg.neighbours       = ft_prepare_neighbours(cfg_neighb, TFGrandDrumdata);
-% cfg.dimord           ='subj_chan_freq';
-%
-%
-% design = zeros(1, length(ssListSong) + length(ssListRest));
-% design(1, 1:length(ssListSong))=1;
-% design(1, (length(ssListSong)+1):(length(ssListSong) + length(ssListRest)))=2;
-%
-% cfg.design   = design';
-% cfg.ivar     = 1;
-%
-% [statSong] =  ft_freqstatistics(cfg, TFGrandSongdata, TFGrandRestdata)
-%
-% meanSong=mean(TFGrandSylldata.powspctrm);
-% meanSong=squeeze(meanSong);
-% meanRest=mean(TFGrandRestdata.powspctrm);
-% meanRest=squeeze(meanRest);
-% statSong.raweffect = meanSong- meanRest;
-%statSong.raweffect = statSong.raweffect(:,2,:);
+try
+    cfg = [];
+    cfg.alpha  = 0.1;
+    cfg.parameter = 'stat';
+    cfg.markers='labels';
+    cfg.highlight    =  'labels';
+    cfg.channel = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
+    cfg.highlightseries = {'labels','labels','labels','labels','labels'};
+    %cfg.highlightsizeseries =[8 8 8 8 8];
+    cfg.layout = EGI;
+    ft_clusterplot(cfg, statSong);
+end
 
-% try
-%     cfg = [];
-%     cfg.alpha  = 0.05;
-%     cfg.parameter = 'stat';
-%     cfg.markers='labels';
-%     cfg.highlight    =  'labels';
-%     cfg.channel = [2:16 18:22 24:28 30 31 33:42 44:46 48:54 56:60];
-%     cfg.highlightseries = {'labels','labels','labels','labels','labels'};
-%     %cfg.highlightsizeseries =[8 8 8 8 8];
-%     cfg.layout = EGI;
-%     ft_clusterplot(cfg, statSong);
-% end
+
+
+DiffDrum=TFGrandDrumdata.powspctrm-TFGrandRestdata.powspctrm;
+ClustDiffDrum=DiffDrum(:,[10 11 12 6 ], 17)
+MeanClusDiffDrum=mean(ClustDiffDrum,2);
+
+
+DiffSyll=TFGrandSylldata.powspctrm-TFGrandRestdata.powspctrm;
+ClustDiffSyl=DiffSyll(:,[10 11 12 6 ],17)
+MeanClusDiffSyll=mean(ClustDiffSyl,2);
+
+figure(200)
+bar(MeanClusDiffDrum)
+hold on
+bar(MeanClusDiffSyll, 'r')
+
+Diff=TFGrandSylldata.powspctrm-TFGrandDrumdata.powspctrm;
+ClustDiff=DiffSyll(:,[10 11 12 6], 2, 5)
+MeanClusDiff=mean(ClustDiffSyl,2)
+
+figure(300)
+bar(MeanClusDiff)

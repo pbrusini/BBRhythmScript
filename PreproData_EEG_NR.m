@@ -1,10 +1,10 @@
-pathin='/media/perrine/LACIE SHARE/4mo/';
-ssList=dir([pathin '*.raw']); %dir([pathin  ssPath(t).name '/*.raw']);
-pathoutsegment='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/9months/Event_Filtered/'
-pathoutset='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/9months/Event_Filtered/'
+pathin='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event_Filtered/';
+ssList=dir([pathin '*.set']); %dir([pathin  ssPath(t).name '/*.raw']);
+pathoutsegment='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event_Filtered/'
+pathoutset='/media/Work/Data_RhythmProject/Data_Analysis/EEG_Analysis/4months/Event_Filtered/'
 
 
-for i =5:length(ssList)
+for i =96:length(ssList)
     i
     [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
     subjectName = [pathin  ssList(i).name] %[pathin  ssPath(t).name '/' ssList(i).name]
@@ -12,7 +12,7 @@ for i =5:length(ssList)
     subjectEvent= strcat(subjectNamex, '.evt');
     setNamex = strcat(subjectNamex,'.set');
     
-    EEG = pop_readegi(subjectName, []);
+    EEG = pop_loadset(setNamex,pathin);
     [ALLEEG EEG CURRENTSET] = eeg_store(ALLEEG, EEG);
     
 %     EEG = pop_eegfiltnew(EEG, 0.2, 0);
